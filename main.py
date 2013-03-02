@@ -32,6 +32,8 @@ import jinja2
 from google.appengine.ext import db, blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 
+import utils
+
 #boilerplate (yay boilerplate!)
 #==============================================================================
 
@@ -80,12 +82,19 @@ class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
         blob_info = blobstore.BlobInfo.get(resource)
         self.send_blob(blob_info)
 
+class PlotHandler(Handler):
+    def get(self, blob_key):
+        blob_reader = blobstore.BlobReader(blob_key)
+        parsed = utils.readBlobCsv(blob_reader)
+        self.write(parsed)
+
 #redirects
 #==============================================================================
 app = webapp2.WSGIApplication([
     ('/', IndexHandler),
     ('/upload', UploadHandler),
-    ('/serve/([^/]+)?', ServeHandler)
+    ('/serve/([^/]+)?', ServeHandler),
+    ('/plot/([^/]+)?', PlotHandler)
 ], debug=True)
 
 ## Notes from SO.
