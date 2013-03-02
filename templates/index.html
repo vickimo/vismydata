@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Designer Data</title>
+
+  <LINK href="/css/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+  <h3>Nathan + Vicki's Magical Designer Data website :D</h3>
+  <form id="all_your_data" method="POST" enctype="multipart/form-data" action="{{ upload_url }}">
+    <input type="file" name="file"></input>
+    <input type="submit" name="submit"></input>
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for blob in blobs %}
+      <tr>
+        <td><a href="/serve/{{ blob.key() }}">{{ blob.filename }}</a></td>
+        <td><a href="/plot/{{blob.key() }}">Plot</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+</body>
+</html>
