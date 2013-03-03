@@ -1,0 +1,37 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+form {
+  position: absolute;
+  right: 10px;
+  top: 20px;
+}
+
+.legend {
+  position: absolute;
+  right: 10px;
+}
+
+.chart1 {
+  position: relative;
+  top: 100px;
+}
+
+@font-face {
+font-family: 'Novecentowide-Book';
+src: url('../fonts/Novecentowide-Book.otf') format("opentype");
+}
+body {
+  font-family: 'Novecentowide-Book';
+} 

@@ -4,15 +4,37 @@
   <title>Designer Data</title>
 
   <LINK href="/css/style.css" rel="stylesheet" type="text/css">
+  <link href="static/css/d3style.css" rel="stylesheet" type="text/css">
+  <link href="static/css/radio.css" rel="stylesheet" type="text/css">
+  <script src="static/js/jquery-1.9.1.min.js"></script>
+  <script src="static/js/d3.v3.min.js"></script>
+
+<script>
+function dataLoader(blobkey) {
+  $.getJSON("/load", function(data) {
+    console.log(data)
+  });
+}
+</script>
 
 </head>
 
 <body>
   <h3>Nathan + Vicki's Magical Designer Data website :D</h3>
-  <form id="all_your_data" method="POST" enctype="multipart/form-data" action="{{ upload_url }}">
+  <div><form>
+    <label><input type="radio" name="mode" class="regular-radio" value="grouped"> Grouped</label>
+    <label><input type="radio" name="mode" class="regular-radio" value="stacked" checked> Stacked</label>
+  </form>
+
+  <script src="static/js/viz.js"></script></div>
+
+  <div><form id="all_your_data" method="POST" enctype="multipart/form-data" action="{{ upload_url }}">
     <input type="file" name="file"></input>
     <input type="submit" name="submit"></input>
-  </form>
+  </form></div>
+
+
+  
   <table>
     <thead>
       <tr>
@@ -25,6 +47,8 @@
       <tr>
         <td><a href="/serve/{{ blob.key() }}">{{ blob.filename }}</a></td>
         <td><a href="/plot/{{blob.key() }}">Plot</a></td>
+        <td><input type="button" onclick="dataLoader({{blob.key() }})">Show Plot!</input></td>
+        <td><input type="button" name="loadPlot" onclick=> Show Plot!</input></td>
       </tr>
       {% endfor %}
     </tbody>

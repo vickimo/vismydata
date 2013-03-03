@@ -11,11 +11,11 @@ def readBlobCsv(blob_reader_object, headers=1):
     - data
       - This is a list of dictionaries, with header:value pairs for each row.
     """
-    return_dict = {}
+    all_rows = {}
     headers = blob_reader_object.readline()
     headers = headers.strip().split(',')
     #TODO make this a list concatenation
-    return_dict['data'] = [dict(zip(headers, str(x).strip().split(','))) for x in blob_reader_object]
-    return_dict['metadata'] = ''
-    return return_dict
+    all_rows['data'] = [dict(zip(headers, str(x).strip().split(','))) for x in blob_reader_object]
+    all_rows['metadata'] = ''
+    return all_rows
     
