@@ -3,7 +3,7 @@
 <head>
   <title>Designer Data</title>
 
-  <LINK href="/css/style.css" rel="stylesheet" type="text/css">
+  <LINK href="static/css/style.css" rel="stylesheet" type="text/css">
   <link href="static/css/d3style.css" rel="stylesheet" type="text/css">
   <link href="static/css/radio.css" rel="stylesheet" type="text/css">
   <script src="static/js/jquery-1.9.1.min.js"></script>
@@ -11,9 +11,11 @@
 
 <script>
 function dataLoader(blobkey) {
-  $.getJSON("/load", function(data) {
-    console.log(data)
-  });
+  $.ajax({
+    url: "/load/" + blobkey
+  }).done(function(data) {
+    console.log(data);
+  })
 }
 </script>
 
@@ -21,12 +23,12 @@ function dataLoader(blobkey) {
 
 <body>
   <h3>Nathan + Vicki's Magical Designer Data website :D</h3>
-  <div><form>
-    <label><input type="radio" name="mode" class="regular-radio" value="grouped"> Grouped</label>
-    <label><input type="radio" name="mode" class="regular-radio" value="stacked" checked> Stacked</label>
-  </form>
+  <!-- <div><form> -->
+  <!--   <label><input type="radio" name="mode" class="regular-radio" value="grouped"> Grouped</label> -->
+  <!--   <label><input type="radio" name="mode" class="regular-radio" value="stacked" checked> Stacked</label> -->
+  <!-- </form> -->
 
-  <script src="static/js/viz.js"></script></div>
+  <!-- <script src="static/js/viz.js"></script></div> -->
 
   <div><form id="all_your_data" method="POST" enctype="multipart/form-data" action="{{ upload_url }}">
     <input type="file" name="file"></input>
@@ -45,10 +47,9 @@ function dataLoader(blobkey) {
     <tbody>
       {% for blob in blobs %}
       <tr>
-        <td><a href="/serve/{{ blob.key() }}">{{ blob.filename }}</a></td>
-        <td><a href="/plot/{{blob.key() }}">Plot</a></td>
-        <td><input type="button" onclick="dataLoader({{blob.key() }})">Show Plot!</input></td>
-        <td><input type="button" name="loadPlot" onclick=> Show Plot!</input></td>
+        <td><a href="/serve/{{ blob.key }}">{{ blob.filename }}</a></td>
+        <td><a href="/plot/{{blob.key }}">Plot</a></td>
+        <td><button onclick="dataLoader('{{blob.key }}')">Show Plot!</td>
       </tr>
       {% endfor %}
     </tbody>

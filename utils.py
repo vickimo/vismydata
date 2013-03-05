@@ -13,9 +13,9 @@ def readBlobCsv(blob_reader_object, headers=1):
     """
     all_rows = {}
     headers = blob_reader_object.readline()
-    headers = headers.strip().split(',')
+    headers = headers.strip().decode('utf-8', 'ignore').split(',')
     #TODO make this a list concatenation
-    all_rows['data'] = [dict(zip(headers, str(x).strip().split(','))) for x in blob_reader_object]
+    all_rows['data'] = [dict(zip(headers, str(x).strip().decode('utf-8', 'ignore').split(','))) for x in blob_reader_object]
     all_rows['metadata'] = ''
     return all_rows
     

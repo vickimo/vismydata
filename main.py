@@ -63,12 +63,19 @@ class IndexHandler(Handler):
     def get(self):
         upload_url = blobstore.create_upload_url('/upload')
         blobs = blobstore.BlobInfo.all()
-        self.render('index.html', upload_url=upload_url, blobs=blobs)
+        blob_infos = []
+        for blob in blobs:
+            blob_infos.append({'filename': blob.filename,
+                               'key': str(blob.key())
+                               })
+        self.render('index.html', upload_url=upload_url, blobs=blob_infos)
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         upload_files = self.get_uploads('file')
         blob_info = upload_files[0]
+        self.response.write('hello!')
+
         self.redirect('/')
 
     def readContents(self, blob_reader):
@@ -90,9 +97,9 @@ class PlotHandler(Handler):
 
 class DataHandler(Handler):
     def get(self, blob_key):
-        blob_reader = blobstore.BlobReader(blog_key)
+        blob_reader = blobstore.BlobReader(blob_key)
         row_dict = utils.readBlobCsv(blob_reader)
-        return json.dumps(row_dict)
+        self.write(json.dumps(row_dict))
 
 #redirects
 #==============================================================================
@@ -101,5 +108,5 @@ app = webapp2.WSGIApplication([
     ('/upload', UploadHandler),
     ('/serve/([^/]+)?', ServeHandler),
     ('/plot/([^/]+)?', PlotHandler),
-    ('/load', DataHandler)
+    ('/load/([^/]+)?', DataHandler)
 ], debug=True)
