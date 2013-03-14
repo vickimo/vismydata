@@ -56,6 +56,14 @@ class Handler(webapp2.RequestHandler):
 
 #models
 #==============================================================================
+class Patron(db.Model):
+    patron_name = db.TextProperty()
+    joined_date = db.DateTimeProperty(auto_now_add = True)
+
+class DataSeries(db.Model):
+    blob_key = db.TextProperty()
+    json_data = db.BlobProperty()
+    name = db.TextProperty()
 
 #handlers
 #==============================================================================
@@ -72,16 +80,16 @@ class IndexHandler(Handler):
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
+        self.response.write('Chugging away...')
         upload_files = self.get_uploads('file')
         blob_info = upload_files[0]
-        self.response.write('hello!')
-
+        blob_reader = blobstore.BlobReader(str(blob_info.key()))
+        row_dict = utils.readBlobCsv(blob_reader)
+        ds = DataSeries(blob_key=str(blob_info.key()),
+                        json_data=json.dumps(row_dict),
+                        name=blob_info.filename)
+        ds.put()
         self.redirect('/')
-
-    def readContents(self, blob_reader):
-        for line in blob_reader:
-            line = line.split(',')
-            
 
 class ServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, resource):
